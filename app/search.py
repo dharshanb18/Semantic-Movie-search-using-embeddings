@@ -9,17 +9,17 @@ def generate_embedding(text: str) -> list[float]:
     )
     return response.json()
 
-def search_movies(query: str, collection, limit: int = 4):
-    embedding = generate_embedding(query)
-    
-    results = collection.aggregate([
-        {"$vectorSearch": {
-            "queryVector": embedding,
-            "path": "plot_embedding_hf",
-            "numCandidates": 100,
-            "limit": limit,
-            "index": "plotSemanticSearch",
-        }}
+def search_movies(query, movie_collection):
+    query_embedding = generate_embedding(query)
+    results = movie_collection.aggregate([
+        {
+            "$vectorSearch": {
+                "queryVector": query_embedding,
+                "path": "plot_embedding_hf",
+                "numCandidates": 10,
+                "limit": 4,
+                "index": "plotSemanticSearch",
+            }
+        }
     ])
-
-    return results
+    return [{"title": movie.get("title", "No Title"), "plot": movie.get("plot", "No Plot")} for movie in results]

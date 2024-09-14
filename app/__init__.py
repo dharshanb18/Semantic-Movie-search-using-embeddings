@@ -1,6 +1,6 @@
 from flask import Flask
 from config.config import Config
-from pymongo import MongoClient
+import pymongo 
 
 
 client=pymongo.MongoClient("mongodb+srv://dharshan:WHJo0D8U5RwID1ph@cluster0.oewot.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
