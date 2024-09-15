@@ -24,7 +24,8 @@ I used MongoDB and their database for this purpose and then I use vector search 
 
 For my embedding I used Hugging face transformer to generate embedding vector for a sentence
 
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/6129070c-9095-4e58-8be0-431d5aacd6c7)
+
 
 Then I have used this pipeline to predict these matches based on similarity score, can use cosine score or manhatten score whichever we choose to , I have use cosine score
 
