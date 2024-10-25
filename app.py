@@ -5,14 +5,14 @@ import requests
 app = Flask(__name__)
 
 # MongoDB connection
-client = pymongo.MongoClient("mongodb+srv://dharshan:WHJo0D8U5RwID1ph@cluster0.oewot.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+client = pymongo.MongoClient("mongodb+srv://<password>@cluster0.oewot.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db = client.sample_mflix
 collection = db.movies
 
-hf_token = "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"
+hf_token = "your api key"
 embedding_url = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
 
-# Generate embedding using Hugging Face API
+# Generate embedding
 def generate_embedding(text: str) -> list:
     response = requests.post(
         embedding_url,
@@ -21,13 +21,12 @@ def generate_embedding(text: str) -> list:
     )
     return response.json()
 
-# Home route (index) for rendering the form and showing results
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         query = request.form.get('query')
-        k = int(request.form.get('k', 4))  # Default to 4 if not provided
-        threshold = float(request.form.get('threshold', 0))  # Default to 0 if not provided
+        k = int(request.form.get('k', 4))
+        threshold = float(request.form.get('threshold', 0))
         
         results = collection.aggregate([
             {"$vectorSearch": {
@@ -43,7 +42,6 @@ def index():
     
     return render_template('index.html', results=None)
 
-# Health route
 @app.route('/health', methods=['GET'])
 def health():
     return "Server is running"
